@@ -11,6 +11,7 @@ namespace Magic_Villa.Models
         public int Sqft { get; set; }
         public int Occupancy { get; set; }
         public String Details { get; set; }
+
         public Double Rate { get; set; }
         public String ImageUrl { get; set; }
         public String Amenity { get; set; }

@@ -31,18 +31,15 @@ namespace Magic_Villa.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Amenity")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Details")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -69,9 +66,9 @@ namespace Magic_Villa.Migrations
                         {
                             Id = 1,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 27, 9, 1, 4, 437, DateTimeKind.Local).AddTicks(9431),
+                            CreatedDate = new DateTime(2023, 5, 1, 23, 51, 52, 606, DateTimeKind.Local).AddTicks(297),
                             Details = "sm,adasas.as/.as/m.das/,.",
-                            ImageUrl = "",
+                            ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa3.jpg",
                             Name = "Shubham",
                             Occupancy = 4,
                             Rate = 300.0,
@@ -82,9 +79,9 @@ namespace Magic_Villa.Migrations
                         {
                             Id = 2,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 27, 9, 1, 4, 437, DateTimeKind.Local).AddTicks(9449),
+                            CreatedDate = new DateTime(2023, 5, 1, 23, 51, 52, 606, DateTimeKind.Local).AddTicks(316),
                             Details = "sm,adasas.as/.as/m.das/,.",
-                            ImageUrl = "",
+                            ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa1.jpg",
                             Name = "Shubham",
                             Occupancy = 4,
                             Rate = 200.0,
@@ -95,9 +92,9 @@ namespace Magic_Villa.Migrations
                         {
                             Id = 3,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 27, 9, 1, 4, 437, DateTimeKind.Local).AddTicks(9451),
-                            Details = "sm,adasas.as/.as/m.dmmas/,.",
-                            ImageUrl = "",
+                            CreatedDate = new DateTime(2023, 5, 1, 23, 51, 52, 606, DateTimeKind.Local).AddTicks(318),
+                            Details = "ssssss",
+                            ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa4.jpg",
                             Name = "Shubham",
                             Occupancy = 4,
                             Rate = 600.0,
@@ -108,9 +105,9 @@ namespace Magic_Villa.Migrations
                         {
                             Id = 4,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 27, 9, 1, 4, 437, DateTimeKind.Local).AddTicks(9454),
-                            Details = "sm,adasas.as/.as/m.das/,.gg",
-                            ImageUrl = "",
+                            CreatedDate = new DateTime(2023, 5, 1, 23, 51, 52, 606, DateTimeKind.Local).AddTicks(321),
+                            Details = "sssssddf",
+                            ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa5.jpg",
                             Name = "Shubham3",
                             Occupancy = 4,
                             Rate = 200.0,
@@ -128,15 +125,30 @@ namespace Magic_Villa.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SpecialDetails")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Villaid")
+                        .HasColumnType("int");
+
                     b.HasKey("VillaNo");
 
+                    b.HasIndex("Villaid");
+
                     b.ToTable("VillaNumbers");
+                });
+
+            modelBuilder.Entity("Magic_Villa.Models.VillaNumber", b =>
+                {
+                    b.HasOne("Magic_Villa.Models.Villa", "Villa")
+                        .WithMany()
+                        .HasForeignKey("Villaid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Villa");
                 });
 #pragma warning restore 612, 618
         }

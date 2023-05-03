@@ -23,11 +23,13 @@ namespace Magic_Villa.Controllers
          }*/
         //private readonly ApplicationDbContext db;
         private readonly IVillaNoRepository dbvillaNo;
+        private readonly IVillaRepository dbvilla;
         private readonly IMapper mapper;
         protected readonly ApiResponse response;
-         public VillaNoApiController(IVillaNoRepository _dbvillaNo,IMapper _mapper)
+         public VillaNoApiController(IVillaNoRepository _dbvillaNo,IMapper _mapper, IVillaRepository _dbvilla)
          {
             dbvillaNo = _dbvillaNo;
+            dbvilla = _dbvilla; 
             mapper = _mapper;
             this.response = new();
          }
@@ -36,8 +38,8 @@ namespace Magic_Villa.Controllers
         {
             try
             {
-                IEnumerable<VillaNumber> VillaList = await dbvillaNo.GetAllAsync();
-                IEnumerable<VillaNumberDto> VillaDtoList = mapper.Map<IEnumerable<VillaNumberDto>>(VillaList);
+                IEnumerable<VillaNumber> VillaList = await dbvillaNo.GetAllAsync(includeProperties:"Villa");
+                IEnumerable<VillaNumberDTO> VillaDtoList = mapper.Map<IEnumerable<VillaNumberDTO>>(VillaList);
                 response.Result = VillaDtoList;
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
@@ -96,7 +98,11 @@ namespace Magic_Villa.Controllers
             {
                 if (await dbvillaNo.GetAsync(u => u.VillaNo == createDto.VillaNo) != null) 
                 {
-                    ModelState.AddModelError("Custom Error", "VillaNumber Already Exists");
+                    ModelState.AddModelError("ErrorMessage", "VillaNumber Already Exists");
+                    return BadRequest(ModelState);
+                }
+                if(await dbvilla.GetAsync(u=>u.Id==createDto.Villaid)==null) {
+                    ModelState.AddModelError("ErrorMessage", "VillaId Invalid");
                     return BadRequest(ModelState);
                 }
                 if (createDto == null)
@@ -170,7 +176,12 @@ namespace Magic_Villa.Controllers
                 {
                     return BadRequest();
                 }
-                var villa = await dbvillaNo.GetAsync(v => v.VillaNo == id, tracked: false);
+                if (await dbvilla.GetAsync(u => u.Id == updateDto.Villaid) == null)
+                {
+                    ModelState.AddModelError("ErrorMessage", "VillaId Already Exists");
+                    return BadRequest(ModelState);
+                }
+                var villa = await dbvillaNo.GetAsync(v => v.VillaNo == id, tracked: true);
                 /*villa.Name=villaDto.Name;   
                 villa.Sqft = villaDto.Sqft; 
                 villa.Occupancy= villaDto.Occupancy;*/

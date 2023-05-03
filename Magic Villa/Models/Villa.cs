@@ -8,7 +8,7 @@ namespace Magic_Villa.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public String? Name { get; set; }
+        public String Name { get; set; }
         public String Details { get; set; }
         public Double Rate { get; set; }
         public String ImageUrl { get; set; }

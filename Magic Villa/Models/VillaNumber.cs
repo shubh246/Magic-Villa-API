@@ -7,6 +7,9 @@ namespace Magic_Villa.Models
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int VillaNo { get; set; }
+        [ForeignKey("Villa")]
+        public int Villaid { get; set; }
+        public Villa Villa { get; set; }
         public String SpecialDetails { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

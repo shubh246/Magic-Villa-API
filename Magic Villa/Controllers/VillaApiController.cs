@@ -37,7 +37,7 @@ namespace Magic_Villa.Controllers
             try
             {
                 IEnumerable<Villa> VillaList = await dbvilla.GetAllAsync();
-                IEnumerable<VillaNumberDto> VillaDtoList = mapper.Map<IEnumerable<VillaNumberDto>>(VillaList);
+                IEnumerable<VillaDto> VillaDtoList = mapper.Map<IEnumerable<VillaDto>>(VillaList);
                 response.Result = VillaDtoList;
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
@@ -55,7 +55,8 @@ namespace Magic_Villa.Controllers
             }
             return response;
         }
-        [HttpGet("id", Name = "GetVilla")]
+        
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,7 +75,7 @@ namespace Magic_Villa.Controllers
                 {
                     return NotFound();
                 }
-                response.Result = mapper.Map<VillaNumberDto>(villa);
+                response.Result = mapper.Map<VillaDto>(villa);
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
             }
@@ -96,7 +97,7 @@ namespace Magic_Villa.Controllers
             {
                 if (await dbvilla.GetAsync(u => u.Name.ToLower() == CreateDto.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("Custom Error", "Villa Already Exists");
+                    ModelState.AddModelError("ErrorMessage", "Villa Already Exists");
                     return BadRequest(ModelState);
                 }
                 if (CreateDto == null)
@@ -122,7 +123,7 @@ namespace Magic_Villa.Controllers
                 //await db.Villas.AddAsync(model);
                 // db.SaveChanges();
                 await dbvilla.CreateAsync(villa);
-                response.Result = mapper.Map<VillaNumberDto>(villa);
+                response.Result = mapper.Map<VillaDto>(villa);
                 response.StatusCode = HttpStatusCode.Created;
 
 
@@ -165,12 +166,12 @@ namespace Magic_Villa.Controllers
         [HttpPut("{id:int}",Name="UpdateVilla")]
         public async Task<ActionResult<ApiResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDto updateDto) {
             try
-            {
+             {
                 if (updateDto == null || id != updateDto.Id)
                 {
                     return BadRequest();
                 }
-                var villa = await dbvilla.GetAsync(v => v.Id == id, tracked: false);
+                //var villa = await dbvilla.GetAsync(v => v.Id == id, tracked: false);
                 /*villa.Name=villaDto.Name;   
                 villa.Sqft = villaDto.Sqft; 
                 villa.Occupancy= villaDto.Occupancy;*/
