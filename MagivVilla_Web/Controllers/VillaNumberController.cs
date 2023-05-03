@@ -91,20 +91,20 @@ namespace MagivVilla_Web.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> UpdateVillaNumber(int VillaNo)
+        public async Task<IActionResult> UpdateVillaNumber(int villaNo)
         {
             VillaNumberUpdateVM villaNumberVM = new VillaNumberUpdateVM();
-            var response = await villaService.GetAsync<ApiResponse>(VillaNo);
+            var response = await villaNumberService.GetAsync<ApiResponse>(villaNo);
             if (response != null && response.IsSuccess)
             {
                 VillaNumberDTO model = JsonConvert.DeserializeObject<VillaNumberDTO>(Convert.ToString(response.Result));
                 villaNumberVM.VillaNumber=mapper.Map<VillaNumberUpdateDto>(model);
 
             }
-            var resp = await villaService.GetAllAsync<ApiResponse>();
-            if (resp != null && resp.IsSuccess)
+            response = await villaService.GetAllAsync<ApiResponse>();
+            if (response != null && response.IsSuccess)
             {
-                villaNumberVM.villaList = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(resp.Result)).Select(
+                villaNumberVM.villaList = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(response.Result)).Select(
                     i => new SelectListItem
                     {
                         Text = i.Name,
@@ -112,7 +112,6 @@ namespace MagivVilla_Web.Controllers
 
                     }); ;
                 return View(villaNumberVM);
-
             }
             return NotFound();
 
@@ -156,23 +155,21 @@ namespace MagivVilla_Web.Controllers
 
 
             return View(model);
-
         }
-
-        public async Task<IActionResult> DeleteVillaNumber(int VillaNo)
+        public async Task<IActionResult> DeleteVillaNumber(int villaNo)
         {
-            VillaNumberDeleteVM villaNumberVM = new ();
-            var response = await villaService.GetAsync<ApiResponse>(VillaNo);
+            VillaNumberDeleteVM villaNumberVM = new VillaNumberDeleteVM();
+            var response = await villaNumberService.GetAsync<ApiResponse>(villaNo);
             if (response != null && response.IsSuccess)
             {
                 VillaNumberDTO model = JsonConvert.DeserializeObject<VillaNumberDTO>(Convert.ToString(response.Result));
                 villaNumberVM.VillaNumber = model;
 
             }
-            var resp = await villaService.GetAllAsync<ApiResponse>();
-            if (resp != null && resp.IsSuccess)
+            response = await villaService.GetAllAsync<ApiResponse>();
+            if (response != null && response.IsSuccess)
             {
-                villaNumberVM.villaList = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(resp.Result)).Select(
+                villaNumberVM.villaList = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(response.Result)).Select(
                     i => new SelectListItem
                     {
                         Text = i.Name,
@@ -180,8 +177,6 @@ namespace MagivVilla_Web.Controllers
 
                     }); ;
                 return View(villaNumberVM);
-
-
             }
             return NotFound();
 
@@ -196,11 +191,13 @@ namespace MagivVilla_Web.Controllers
             var response = await villaNumberService.DeleteAsync<ApiResponse>(model.VillaNumber.VillaNo);
             if (response != null && response.IsSuccess)
             {
+                TempData["success"] = "Villa Deleted Successfully";
+
                 return RedirectToAction(nameof(GetIndexVillaNumber));
 
             }
 
-
+            TempData["error"] = "Error Encountered";
             return View(model);
         }
     }

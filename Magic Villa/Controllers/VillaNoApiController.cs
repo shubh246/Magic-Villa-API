@@ -57,7 +57,7 @@ namespace Magic_Villa.Controllers
             }
             return response;
         }
-        [HttpGet("id", Name = "GetVillaNumber")]
+        [HttpGet("{id:int}", Name = "GetVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
