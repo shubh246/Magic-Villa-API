@@ -2,6 +2,7 @@
 using Magic_Villa.Data;
 using Magic_Villa.Models;
 using Magic_Villa.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace Magic_Villa.Controllers
             this.response = new();
          }
         [HttpGet]
+        [Authorize(Roles ="admin")]
         public async Task<ActionResult<ApiResponse>> GetVilla()
         {
             try
