@@ -2,6 +2,7 @@
 using MagivVilla_Web.Models;
 using Newtonsoft.Json;
 using System;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MagivVilla_Web.Service
@@ -44,6 +45,10 @@ namespace MagivVilla_Web.Service
 
                 }
                 HttpResponseMessage apiResponse = null;
+                if (!string.IsNullOrEmpty(apiRequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
                 apiResponse = await client.SendAsync(message);
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
                 try

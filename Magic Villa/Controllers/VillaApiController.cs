@@ -33,7 +33,7 @@ namespace Magic_Villa.Controllers
             this.response = new();
          }
         [HttpGet]
-        [Authorize(Roles ="admin")]
+        
         public async Task<ActionResult<ApiResponse>> GetVilla()
         {
             try
@@ -89,6 +89,7 @@ namespace Magic_Villa.Controllers
             return response;
 
         }
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -138,6 +139,7 @@ namespace Magic_Villa.Controllers
             }
             return response;
         }
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
         public async Task<ActionResult<ApiResponse>> DeleteVilla(int id)
         {
@@ -165,6 +167,7 @@ namespace Magic_Villa.Controllers
             }
             return response;
         }
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}",Name="UpdateVilla")]
         public async Task<ActionResult<ApiResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDto updateDto) {
             try
@@ -203,6 +206,7 @@ namespace Magic_Villa.Controllers
 
 
         }
+        [Authorize(Roles = "admin")]
         [HttpPatch("{id:int}",Name="UpdateVillaPart")]
         public async Task<ActionResult<ApiResponse>> UpdatePartialVilla(int id,JsonPatchDocument<VillaUpdateDto> patchDto) {
             try

@@ -7,5 +7,6 @@ namespace MagivVilla_Web.Models
         public ApiType ApiType { get; set; } = ApiType.GET;
         public string ApiUrl { get; set; } 
         public Object Data { get; set; }
+        public string Token {get; set; }
     }
 }
