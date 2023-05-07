@@ -54,7 +54,7 @@ namespace MagivVilla_Web.Service
                 try
                 {
                     ApiResponse APiResponse = JsonConvert.DeserializeObject<ApiResponse>(apiContent);
-                    if(apiResponse.StatusCode==System.Net.HttpStatusCode.BadRequest|| apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    if(APiResponse != null&&(apiResponse.StatusCode==System.Net.HttpStatusCode.BadRequest|| apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound))
                     {
                         APiResponse.StatusCode =System.Net.HttpStatusCode.BadRequest;
                         APiResponse.IsSuccess = false;

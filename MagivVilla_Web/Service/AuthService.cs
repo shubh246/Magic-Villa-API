@@ -19,7 +19,7 @@ namespace MagivVilla_Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                ApiUrl = villaUrl + "/api/UserAuth/login"
+                ApiUrl = villaUrl + "/api/v1/UserAuth/login"
 
             });
         }
@@ -30,7 +30,7 @@ namespace MagivVilla_Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                ApiUrl = villaUrl + "/api/UserAuth/register"
+                ApiUrl = villaUrl + "/api/v1/UserAuth/register"
 
             });
         }

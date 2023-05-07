@@ -40,7 +40,7 @@ namespace MagivVilla_Web.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Name, model.User.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Role, model.User.Role));
                 var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 HttpContext.Session.SetString(SD.SessionToken, model.Token);
                 return RedirectToAction("Index","Home");
 

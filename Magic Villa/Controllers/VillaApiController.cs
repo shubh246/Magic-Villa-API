@@ -12,8 +12,9 @@ using System.Net;
 
 namespace Magic_Villa.Controllers
 {
-    [Route("api/VillaApi")]
+    [Route("api/v{version:apiVersion}/VillaApi")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class VillaApiController : ControllerBase
     {
         //private readonly ILogging logger;

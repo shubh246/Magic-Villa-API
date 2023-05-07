@@ -13,9 +13,10 @@ using System.Net;
 
 namespace Magic_Villa.Controllers
 {
-    [Route("api/VillaNumberApi")]
+    [Route("api/v{version:apiVersion}/VillaNumberApi")]
     [ApiController]
-    public class VillaNoApiController : ControllerBase
+    [ApiVersion("1.0")]
+    public class VillaNoApiv1Controller : ControllerBase
     {
         //private readonly ILogging logger;
 
@@ -28,19 +29,20 @@ namespace Magic_Villa.Controllers
         private readonly IVillaRepository dbvilla;
         private readonly IMapper mapper;
         protected readonly ApiResponse response;
-         public VillaNoApiController(IVillaNoRepository _dbvillaNo,IMapper _mapper, IVillaRepository _dbvilla)
-         {
+        public VillaNoApiv1Controller(IVillaNoRepository _dbvillaNo, IMapper _mapper, IVillaRepository _dbvilla)
+        {
             dbvillaNo = _dbvillaNo;
-            dbvilla = _dbvilla; 
+            dbvilla = _dbvilla;
             mapper = _mapper;
             this.response = new();
-         }
+        }
         [HttpGet]
+        //[MapToApiVersion("1.0")]
         public async Task<ActionResult<ApiResponse>> GetVillaNumbers()
         {
             try
             {
-                IEnumerable<VillaNumber> VillaList = await dbvillaNo.GetAllAsync(includeProperties:"Villa");
+                IEnumerable<VillaNumber> VillaList = await dbvillaNo.GetAllAsync(includeProperties: "Villa");
                 IEnumerable<VillaNumberDTO> VillaDtoList = mapper.Map<IEnumerable<VillaNumberDTO>>(VillaList);
                 response.Result = VillaDtoList;
                 response.StatusCode = HttpStatusCode.OK;
@@ -59,6 +61,7 @@ namespace Magic_Villa.Controllers
             }
             return response;
         }
+        
         [HttpGet("{id:int}", Name = "GetVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

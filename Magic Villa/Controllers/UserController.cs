@@ -5,8 +5,9 @@ using System.Net;
 
 namespace Magic_Villa.Controllers
 {
-    [Route("api/UserAuth")]
+    [Route("api/v{version:apiVersion}/UserAuth")]
     [ApiController]
+    [ApiVersionNeutral]
     public class UserController : Controller
     {
         private readonly IUserRepository userRepository;
