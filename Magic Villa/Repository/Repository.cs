@@ -36,6 +36,7 @@ namespace Magic_Villa.Repository
             {
                 query = query.Where(filter);
             }
+            
             if (includeProperties != null)
             {
                 foreach(var inclupro in includeProperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries))
@@ -46,12 +47,21 @@ namespace Magic_Villa.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter, string? includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter, string? includeProperties = null, int pagesize = 0, int pagenumber = 1)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
+            }
+            if (pagesize > 0)
+            {
+                if (pagesize > 100)
+                {
+                    pagesize = 100;
+                }
+
+                query = query.Skip(pagesize * (pagenumber - 1)).Take(pagesize);
             }
             if (includeProperties != null)
             {

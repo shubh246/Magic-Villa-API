@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.Json;
 
 namespace Magic_Villa.Controllers
 {
@@ -34,12 +35,25 @@ namespace Magic_Villa.Controllers
             this.response = new();
          }
         [HttpGet]
+        [ResponseCache(CacheProfileName="Default30")]
         
-        public async Task<ActionResult<ApiResponse>> GetVilla()
+        public async Task<ActionResult<ApiResponse>> GetVilla([FromQuery] int? occupancy, [FromQuery]string? search, int pagesize = 0, int pagenumber = 1)
         {
             try
             {
-                IEnumerable<Villa> VillaList = await dbvilla.GetAllAsync();
+                IEnumerable<Villa> VillaList;
+                if (occupancy > 0)
+                {
+                    VillaList = await dbvilla.GetAllAsync(u => u.Occupancy == occupancy,pagesize:pagesize,pagenumber:pagenumber);
+                }
+                else {
+                    VillaList = await dbvilla.GetAllAsync(); }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    VillaList = VillaList.Where(u=>u.Name.ToLower().Contains(search));
+                }
+                Pagination pagination = new() { PageNumber = pagenumber, PageSize = pagesize };
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
                 IEnumerable<VillaDto> VillaDtoList = mapper.Map<IEnumerable<VillaDto>>(VillaList);
                 response.Result = VillaDtoList;
                 response.StatusCode = HttpStatusCode.OK;
@@ -60,6 +74,7 @@ namespace Magic_Villa.Controllers
         }
         
         [HttpGet("{id:int}")]
+        [ResponseCache(Duration = 30)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
